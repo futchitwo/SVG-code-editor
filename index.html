@@ -7,11 +7,9 @@
     <link rel="icon" type="image/svg" href="/logo.svg" />
     <title>SVG Playground</title>
     <script>
-      // process shim for old versions of @vue/compiler-sfc dependency
-      window.process = { env: {} }
       const saved = localStorage.getItem('prefer-dark')
       if (
-        saved !== 'false' ||
+        saved === 'true' ||
         window.matchMedia('(prefers-color-scheme: dark)').matches
       ) {
         document.documentElement.classList.add('dark')

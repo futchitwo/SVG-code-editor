@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import { ref, computed, watchEffect } from 'vue'
+import { debounce, atou, utoa } from './utils'
+import CodeMirror from './codemirror/CodeMirror.vue'
 
 const serializedState = location.hash.slice(1);
 const saved = atou(serializedState);
@@ -9,16 +11,14 @@ const escapedSvg = computed(() => encodeURIComponent(svgFile.value))
 const dataSvg = computed(() => 'data:image/svg+xml;utf8,' + escapedSvg.value)
 
 const svgParent = ref("object")
-  
-function utoa(data: string): string {
-  return btoa(unescape(encodeURIComponent(data)))
-}
 
-function atou(base64: string): string {
-  return decodeURIComponent(escape(atob(base64)))
-}
 const rawFileUrl = computed(()=>{ return location.origin + '/svg/' +  utoa(svgFile.value)})
 watchEffect(() => history.replaceState({}, '', '#' + utoa(svgFile.value)))
+
+const onChange = debounce((code: string) => {
+  svgFile.value = code
+}, 250)
+
 
 const onTabClick = (tabName) => {
   svgParent.value = tabName
@@ -27,7 +27,10 @@ const onTabClick = (tabName) => {
 
 <template>
 <div class="editor-area">
-  <textarea v-model="svgFile"></textarea>
+  <CodeMirror
+    @change="onChange"
+    :value="svgFile"
+  />
 </div>
 <div class="viewer-area">
   <div class="tab-area">

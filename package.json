@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "atob": "^2.1.2",
+    "codemirror": "^5.65.2",
     "fastify": "^3.28.0",
     "vue": "^3.2.32"
   },
