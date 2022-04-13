@@ -1,4 +1,5 @@
 const app = require("fastify")();
+const atob = require("atob");
 
 app.get('/svg/*', (req,res) => {
   const body = decodeURIComponent(escape(atob(req.params["*"])));
