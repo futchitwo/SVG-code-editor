@@ -27,10 +27,13 @@ const onTabClick = (tabName) => {
 
 <template>
 <div class="editor-area">
-  <CodeMirror
-    @change="onChange"
-    :value="svgFile"
-  />
+  <!--fieldset>
+    <legend>Code</legend-->
+    <CodeMirror
+      @change="onChange"
+      :value="svgFile"
+    />
+  <!--/fieldset-->
 </div>
 <div class="viewer-area">
   <div class="tab-area">
@@ -45,15 +48,15 @@ const onTabClick = (tabName) => {
   </div>
   <div class="viewer-container">
     <fieldset v-if="svgParent === 'object'">
-      <legend>Object tag:</legend>
+      <legend>Object tag</legend>
       <object type="image/svg+xml" :data="dataSvg"></object>
     </fieldset>
     <fieldset v-else-if="svgParent === 'img'">
-      <legend>Img tag:</legend>
+      <legend>Img tag</legend>
       <img :src="dataSvg">
     </fieldset>
     <fieldset v-else-if="svgParent === 'inline'">
-      <legend>Inline SVG tag:</legend>
+      <legend>Inline SVG tag</legend>
       <svg v-html="svgFile"></svg>
     </fieldset>
   </div>
@@ -101,5 +104,11 @@ const onTabClick = (tabName) => {
   
   .viewer-container {
     overflow-x:scroll;
+  }
+  
+  fieldset {
+    width: calc(var(--outer-width) - 132px);
+    min-inline-size: auto;
+    position: relative;
   }
 </style>
