@@ -1,8 +1,8 @@
 {
     "rewrites": [
         {
-            "source": "/svg/(.*)",
-            "destination": "/api/serverless.js"
+            "source": "/svg/:q",
+            "destination": "/api/vercel-function.js"
         }
     ]
 }

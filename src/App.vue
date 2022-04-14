@@ -33,7 +33,7 @@ const onTabClick = (tabName) => {
       @change="onChange"
       :value="svgFile"
     />
-  <!--/fieldset-->
+    <!--/fieldset-->
 </div>
 <div class="viewer-area">
   <div class="tab-area">
@@ -41,6 +41,7 @@ const onTabClick = (tabName) => {
       <button role="tab" @click="onTabClick('object')">Object</button>
       <button role="tab" @click="onTabClick('img')">Img</button>
       <button role="tab" @click="onTabClick('inline')">Inline</button>
+      <button role="tab" @click="onTabClick('text')">Base64</button>
     </div>
     <div class="raw-url-container">
       <span> Raw: <code><a :href="rawFileUrl">{{rawFileUrl}}</a></code></span>
@@ -49,15 +50,27 @@ const onTabClick = (tabName) => {
   <div class="viewer-container">
     <fieldset v-if="svgParent === 'object'">
       <legend>Object tag</legend>
-      <object type="image/svg+xml" :data="dataSvg"></object>
+      <div class="svg-wrapper">
+        <object type="image/svg+xml" :data="dataSvg"></object>
+      </div>
     </fieldset>
     <fieldset v-else-if="svgParent === 'img'">
       <legend>Img tag</legend>
-      <img :src="dataSvg">
+      <div class="svg-wrapper">
+        <img :src="dataSvg">
+      </div>
     </fieldset>
     <fieldset v-else-if="svgParent === 'inline'">
       <legend>Inline SVG tag</legend>
-      <svg v-html="svgFile"></svg>
+      <div class="svg-wrapper">
+        <svg v-html="svgFile"></svg>
+      </div>
+    </fieldset>
+    <fieldset v-else-if="svgParent === 'text'">
+      <legend>Encoded text (base64)</legend>
+      <div class="svg-wrapper">
+        <span class="encoded-text">{{dataSvg}}</span>
+      </div>
     </fieldset>
   </div>
 </div>
@@ -66,31 +79,19 @@ const onTabClick = (tabName) => {
 <style>
   .editor-area,.viewer-area {
     --outer-padding: 8px;
-    --outer-width: clamp(calc(50vw - var(--outer-padding) * 2),calc(1000000vh - 1000000vw),100vw);
-    --outer-height: clamp(calc(50vh - var(--outer-padding) * 2),calc(1000000vw - 1000000vh),100vh);
+    --outer-width: clamp(50vw,calc(1000000vh - 1000000vw),100vw);
+    --outer-height: clamp(50vh,calc(1000000vw - 1000000vh),100vh);
     width: var(--outer-width);
     height: var(--outer-height);
-    max-width: calc(100vw - var(--outer-padding) * 2);
-    max-height: calc(100vh - var(--outer-padding) * 2);
     padding: var(--outer-padding);
     margin: 0px;
-    display: inline-block;
     display: inline-grid;
-  }
-  textarea {
-    width: 100%;
-    width: -webkit-fill-available;
-    width: -moz-available;
-    height: 100%;
-    height: -webkit-fill-available;
-    height: -moz-available;
-    min-height: 100px;
-    min-width: 300px;
+    box-sizing:border-box;
   }
   
   .tab-area {
     display:flex;
-    width: calc(var(--outer-width) - var(--outer-padding) * 2);
+    overflow: hidden;
   }
   .tab-list {
     margin-right:10px;
@@ -103,12 +104,18 @@ const onTabClick = (tabName) => {
   }
   
   .viewer-container {
-    overflow-x:scroll;
+    overflow-x: hidden; /* scroll; */
+  }
+  .svg-wrapper {
+    overflow: auto;
+  }
+
+  .encoded-text{
+    word-break: break-all;
   }
   
   fieldset {
-    width: calc(var(--outer-width) - 132px);
     min-inline-size: auto;
-    position: relative;
+    overflow:hidden;
   }
 </style>
